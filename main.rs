@@ -1,36 +1,64 @@
-/* Mutable Slice */
+/* Structure */
+
+#[derive(Debug)]
+struct Coffee {
+    price   : f64,
+    name    : String,
+    is_hot  : bool,
+}
+
 fn main()
 {
-    let cities : String = String :: from("Mumbai Hyd Munich Tokyo");
 
-    let favorite_city : &str = &cities[17..];
+    let order_coffee : Coffee  = Coffee {
+        price   : 6.5,
+        name    : String::from("Capecinno"),
+        is_hot  : true, 
+    };
 
-    print_string_len(&cities);
-    print_string_len(favorite_city);
-
-
-    let mut number = [10, 15, 17, 23, 92, 93];
-    let array_slice = &mut number[..3];
-
-    array_slice[0] = 23;
-
-    print_array(array_slice);
-    print_array(&number);
-
-    let string : String = String::from("I am a great!");
+    println!("{:?}", order_coffee);
     
-    /* This just creates a new string with replace sub string */
-    let new_string = string.replace("I am", "You");
-
-    println!("{}", new_string);
-    println!("{}", string);
+    println!(
+        "Your coffee {} is ready please pay {}$ and it serve hot {}", 
+        order_coffee.name,
+        order_coffee.price,
+        order_coffee.is_hot);
     
+    /* At this point order_coffee.name ownership is transferred to last_order_coffee 
+     * and order_coffee.name is no longer valid */
+    let last_order_coffee = order_coffee.name;
+
+    println!("{last_order_coffee}");
+
+    /* Below line will give compile time error */
+   // println!("{:?}", order_coffee);
+   
+    /* We can only make whole structure object mutable. Not individual field within 
+     * struct */
+    let mut next_order_coffee : Coffee  = Coffee {
+        price   : 7.5,
+        name    : String::from("moccha"),
+        is_hot  : true, 
+    };
+
+    println!("{:?}", next_order_coffee);
+    next_order_coffee.name = String::from("Creamy Latte");
+    next_order_coffee.price = 9.0;
+    next_order_coffee.is_hot = false;
+    println!("{:?}", next_order_coffee);
+
+
+    let my_coffee = make_coffee("Dark Chocolate Latte".to_string(), 15.5, true);
+
+    println!("{my_coffee:?}");
 }
 
-fn print_array(array:&[i32]) {
-    println!("{:?}", array.len());
+fn make_coffee(name:String, price:f64, is_hot:bool) -> Coffee {
+    Coffee {
+       name: name,
+       price:price,
+       is_hot:is_hot,
+    }
 }
 
-fn print_string_len(string:&str) {
-    println!("{}", string.len()); 
-}
+
