@@ -1,61 +1,65 @@
-/* Enums */
+/* Enums Implementation */
+
 #![allow(unused)]
 
+/*Tuple variant*/
 #[derive(Debug)]
-enum CardsSuits {
-    Hearts,
-    Diamonds,
-    Clubs,
-    Spades,
+enum PaymentMethod {
+    Upi(String),
+    CreditCard(String, String, bool),
+    DebitCard(String, String, bool),
+}
+
+/*Structure variant*/
+#[derive(Debug)]
+struct UserStatusDetails {
+    name:String,
+    card_number:String, 
+    linked_mobile:String, 
+    is_active:bool
 }
 
 #[derive(Debug)]
-struct CardGame {
-    no_of_cards:u32,
-    card_combination:CardsSuits,
-} 
-
-/* Tuple like Struct*/
-#[derive(Debug)]
-struct SpecialCards (
-    char,
-    char,
-    char,
-    char,
-);
+enum CustomerDetails {
+    BasicUser(UserStatusDetails),
+    ProLiteSubscribedUser(UserStatusDetails),
+    ProSubscribedUser(UserStatusDetails),
+}
 
 fn main()
 {
-    let first_card = CardsSuits::Hearts;
-    let second_card = CardsSuits::Diamonds;
+    let payment_method1 = PaymentMethod::Upi(String::from("example@upiid"));
+    println!("\nO'reilly payment method is {:?}", payment_method1);
     
-    println!("{:?} {:?}", first_card, second_card);
+    let payment_method2 = PaymentMethod::CreditCard
+        (
+            String::from("1234-5678-0134"),
+            String::from("9087665151"),
+            true
+        );
+
+    println!("\nUdemy payment method is {:?}", payment_method2);
     
-    let mut swapped_card = second_card;
+    let payment_method3 = PaymentMethod::DebitCard
+        (
+            String::from("1234-5678-0134"),
+            String::from("9087665151"),
+            true
+        );
 
-    println!("{:?}" , swapped_card);
+    println!("\nApple TV payment method is {:?}", payment_method3);
 
-    /* Structure Example with enum */
-    let rummy = CardGame {
-        no_of_cards:52,
-        card_combination: CardsSuits::Hearts,
-    }; 
+    let netflix_customer:CustomerDetails = CustomerDetails :: 
+        BasicUser(
+            UserStatusDetails {
+                name:String::from("Bob Ryne"),
+                card_number:String::from("1234-1234"), 
+                linked_mobile:String::from("123333466373"), 
+                is_active:true 
+            }
+        );
 
-    println!("Rummy {:?}", rummy);
-
-
-    /* Tuple example using enums*/
-    let my_favorite_cards: (CardsSuits, CardsSuits) = (
-        CardsSuits::Diamonds,
-        CardsSuits::Clubs,
-    );
-    
-    println!("My Favorite Card Types {:?}", my_favorite_cards);
-
-
-    let special_cards = SpecialCards ('A', 'K', 'Q', 'J');
-
-    println!("Special Cards {:?}", special_cards);
+    println!("\nNetflix User :: {:#?}", netflix_customer);
 }
 
 
